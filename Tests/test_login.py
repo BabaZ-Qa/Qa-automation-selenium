@@ -20,21 +20,16 @@ A2 = Login("tomsmith", "fefef")
 A3 = Login("tomsmith", "SuperSecretPassword!")
 
 
-@pytest.mark.smoke
-@pytest.mark.cloud
 def test_login_user():
     print("Ugurlu")
     assert "Your username is invalid!" in A1
 
 
-@pytest.mark.smoke
-@pytest.mark.cloud
 def test_login_pass():
     print("Ugurlu")
     assert 'Your password is invalid!' in A2
 
 
-@pytest.mark.smoke
 def test_login_succ():
     print("Ugurlu")
     assert "You logged into a secure area!" in A3

@@ -1,21 +1,18 @@
 import pytest
-from selenium.webdriver.common.by import By
-from selenium.webdriver.support.wait import WebDriverWait
-from selenium.webdriver.support import expected_conditions
+from Tests_Pages.Homepage import Homepage
 
 
 @pytest.mark.usefixtures("test_setup")
 class TestCartButton:
+
+    @pytest.fixture(autouse=True)
+    def class_setup(self):
+        self.homepage = Homepage(self.driver)
+
     def test_adds_products_to_cart(self):
         self.driver.get("https://demowebshop.tricentis.com/")
-        self.driver.find_element(
-            By.XPATH, "//h2/a[text()='14.1-inch Laptop']").click()
-        self.driver.find_element(
-            By.CSS_SELECTOR, "input[id^='add-to-cart']").click()
-        WebDriverWait(self.driver, 20).until(expected_conditions.presence_of_element_located(
-            (By.XPATH, "//a[text()='shopping cart']")))
-        self.driver.find_element(
-            By.XPATH, "//a[text()='shopping cart']").click()
-        mesaj = self.driver.find_element(
-            By.XPATH, "//td/a[text()='14.1-inch Laptop']").text
+        laptop_page = self.homepage.laptop_urunune_tikla()
+        laptop_page.laptop_add_to_cart_bas()
+        urun_ismi = cartpage = laptop_page.sebet_linkine_bas_mehsulu_bax()
+        mesaj = cartpage.urunun_sebetde_oldugunu_dogrulama()
         assert mesaj == "14.1-inch Laptop"

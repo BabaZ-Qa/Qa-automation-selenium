@@ -1,22 +1,23 @@
-from selenium import webdriver
-from selenium.webdriver.common.by import By
-from selenium.webdriver.support.wait import WebDriverWait
-from selenium.webdriver.support import expected_conditions
+import pytest
+from Tests_Pages import PageBase
+from Tests_Pages.GiftCardHomepage import GiftCardHome
+from Tests_Pages.GiftCardPrice import GiftCardPrice
+import softest
 
 
-class Testvisible:
+@pytest.mark.usefixtures("test_setup")
+class Testvisible(softest.TestCase):
+
+    @pytest.fixture(autouse=True)
+    def class_setup(self):
+        self.gift_card = GiftCardHome(self.driver)
+
+    @pytest.mark.smut
     def test_mehsulun_adi_qiymetini_dogrulama(self):
-        driver = webdriver.Chrome()
-        driver.maximize_window()
-        driver.get("https://demowebshop.tricentis.com/")
-        WebDriverWait(driver, 20).until(expected_conditions.presence_of_element_located(
-            (By.XPATH, "//h2/a[text()='$25 Virtual Gift Card']")))
-        driver.find_element(
-            By.XPATH, "//h2/a[text()='$25 Virtual Gift Card']").click()
-        ad = driver.find_element(
-            By.XPATH, "//h1[contains(text(),'$25 Virtual Gift Card')]").text
-        qiymet = driver.find_element(
-            By.XPATH, "//span[contains(text(),'25.00')]").text
-        assert ad == '$25 Virtual Gift Card'
-        assert qiymet == '25.00'
-        driver.quit()
+        gift_price = self.gift_card.gift_urunune_tikla()
+        giftin_adi = gift_price.gift_urun_ad_dogrula()
+        giftin_qiymeti = gift_price.gift_urununun_qiymetini_dogrula()
+        print("Urunun adi:"+giftin_adi)
+        print("Urunun qiymeti:"+giftin_qiymeti)
+        assert giftin_adi == '$25 Virtual Gift Card'
+        assert giftin_qiymeti == '25.00'

@@ -1,6 +1,5 @@
 import pytest
-
-system = 'windows'
+import re
 
 
 def ucbucaq_cevre(a, b, c):
